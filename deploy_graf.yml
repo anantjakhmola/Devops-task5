@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: deploy-graf
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  
+  template:
+    metadata:
+      name: deploy-graf
+      labels:
+        app: grafana
+  
+    spec:
+      volumes:
+      - name: storage-graf
+        persistentVolumeClaim:
+          claimName: pvc-graf
+      containers:
+        - name: graf
+          image: anantj1/grafana:v1
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: "/data_grafana"
+              name: storage-graf
+      
+      restartPolicy: Always
